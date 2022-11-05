@@ -49,7 +49,7 @@ df['labels'] = pd.factorize(df.kategori)[0]
 3061 rows × 3 columns
 """""
 
-# test %20 - train %80
+# Test %20 - Train %80
 train, test = train_test_split(a, test_size=0.2, random_state=42)
 
 # kategori dropped
@@ -60,12 +60,12 @@ test = test[["metin", "labels"]]
 train["metin"] = train["metin"].apply(lambda r: str(r))
 train['labels'] = train['labels'].astype(int)
 
-# Available models
+# Available Models
 model = ClassificationModel('bert', 'dbmdz/bert-base-turkish-uncased', num_labels=5, use_cuda=False,
                             args={'reprocess_input_data': True, 'overwrite_output_dir': True, 'num_train_epochs': 3,
                                   "train_batch_size": 64, "fp16": False, "output_dir": "bert_model"})
 
-# Build models
+# Build Models
 model.train_model(train)
 
 # Test data given to model data
