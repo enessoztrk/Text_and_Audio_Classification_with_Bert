@@ -9,6 +9,7 @@ from simpletransformers.classification import ClassificationModel
 from sklearn.metrics import accuracy_score
 # !pip install simpletransformers
 
+# Read Dataset
 df = pd.read_excel("C:/Users/hp/PycharmProjects/Text and Audio Classification with Bert/data.xlsx")
 """""
     kategori	        metin
@@ -26,6 +27,7 @@ df = pd.read_excel("C:/Users/hp/PycharmProjects/Text and Audio Classification wi
 3061 rows × 2 columns
 """""
 
+# Unique Categories
 df["kategori"].unique()
 # array(['Bilim Ve Teknoloji', 'Ekonomi', 'Sağlık', 'Siyaset', 'Spor'],dtype=object)
 
@@ -58,6 +60,7 @@ test = test[["metin", "labels"]]
 train["metin"] = train["metin"].apply(lambda r: str(r))
 train['labels'] = train['labels'].astype(int)
 
+# Available models
 model = ClassificationModel('bert', 'dbmdz/bert-base-turkish-uncased', num_labels=5, use_cuda=False,
                             args={'reprocess_input_data': True, 'overwrite_output_dir': True, 'num_train_epochs': 3,
                                   "train_batch_size": 64, "fp16": False, "output_dir": "bert_model"})
@@ -68,20 +71,22 @@ model.train_model(train)
 # Test data given to model data
 result, model_outputs, wrong_predictions = model.eval_model(test)
 
-# predictions
+# Predictions Vs Actuals
 predictions = model_outputs.argmax(axis=1)
-
-# real values
 actuals = test.labels.values
 
 predictions[:10]
+# array([3, 0, 2, 2, 3, 0, 4, 4, 1, 2])
 
 actuals[:10]
+# array([3, 0, 2, 2, 3, 0, 4, 4, 1, 2])
 
+# Predictor
 # 97% success rate achieved
 accuracy_score(actuals, predictions)
 
 example = test.iloc[43]['metin']
+
 print(example)
 # İstanbul Teknik Üniversitesi (İTÜ) Nanoteknoloji Uygulama ve Araştırma Merkezi (İTÜnano)
 # bünyesinde geliştirilen "NanoGeliştirilmiş Ölçeklenebilir Kuantum Güneş Pili Tasarımı Üretimi ve Karakterizasyonu"
